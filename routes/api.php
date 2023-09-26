@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('send-code', [\App\Http\Controllers\Api\Auth\UserController::class, "sendCode"]);
+Route::post('register-login', [\App\Http\Controllers\Api\Auth\UserController::class, "RegisterLogin"]);
+
+Route::group(['prefix' => "v1/"], function () {
+    Route::group(['prefix' => "question", 'middleware' => 'auth:api'], function () {
+        Route::resource('/',\App\Http\Controllers\Api\v1\QuestionController::class)->except(['show']);
+    });
 });
+
